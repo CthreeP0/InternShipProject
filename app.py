@@ -1,3 +1,4 @@
+
 import pandas as pd
 import streamlit as st
 from langchain_openai import AzureChatOpenAI
@@ -20,15 +21,17 @@ llm = AzureChatOpenAI(
 
 # Streamlit UI for file upload
 st.title("CSV File Uploader")
-uploaded_files = st.file_uploader("Upload CSV files", accept_multiple_files=True, type=["csv"])
+uploaded_files = st.file_uploader("Upload CSV files", accept_multiple_files=True, type=["csv","pdf","xslx"])
 
 dataframes = {}
 if uploaded_files:
     for uploaded_file in uploaded_files:
-        df_name = uploaded_file.name.split('.')[0]
-        dataframes[df_name] = pd.read_csv(uploaded_file)
-        st.write(f"DataFrame: {df_name}")
-        st.dataframe(dataframes[df_name].head())
+        if uploaded_file.name.endswith('.xlsx'):
+            df_name = uploaded_file.name.split('.')[0]
+            dataframes[df_name] = pd.read_csv(uploaded_file)
+            st.write(f"DataFrame: {df_name}")
+            st.dataframe(dataframes[df_name].head())
+
 
 # Convert the dataframes to markdown for the prompt
 df_template = """```python
@@ -45,13 +48,13 @@ tool = PythonAstREPLTool(locals=dataframes)
 llm_with_tool = llm.bind_tools(tools=[tool], tool_choice=tool.name)
 
 # Define system prompt
-system_prompt = f"""You have access to multiple pandas dataframes. 
+system_prompt = f"""You have access to a number of pandas dataframes. \
 Here is a sample of rows from each dataframe and the python code that was used to generate the sample:
 
 {df_context}
 
-Given a user question about the dataframes, write the Python code to answer it. 
-Don't assume you have access to any libraries other than built-in Python ones and pandas. 
+Given a user question about the dataframes, write the Python code to answer it. \
+Don't assume you have access to any libraries other than built-in Python ones and pandas. \
 Make sure to refer only to the variables mentioned above."""
 
 # Define chat prompt template
@@ -82,8 +85,12 @@ user_question = st.text_input("Ask a question about the dataframes:")
 
 if user_question:
     result = chain.invoke({"question": user_question})
-    st.write("Python Code:")
-    st.code(result['tool_output'], language='python')
-    st.write("Chatbot Response:")
-    st.write(result['response'])
-
+    st.write("Debugging Result:")
+    st.write(result)  # This will help us see the structure of `result`
+    
+    if isinstance(result, dict) and 'response' in result:
+        st.write("Chatbot Response:")
+        st.write(result['response'])
+    else:
+        st.write("Unexpected result format. Here is the raw result:")
+        st.write(result)
