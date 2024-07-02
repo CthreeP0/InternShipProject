@@ -10,7 +10,6 @@ from langchain_core.messages import ToolMessage
 
 class ChatbotAgent:
     def __init__(self, dataframes):
-        print("ChatbotAgent initialized")
         self.dataframes = {name: pd.read_csv(df) for name, df in dataframes.items()}
         self.llm = AzureChatOpenAI(
             deployment_name="gpt-35-turbo-16k",

@@ -15,7 +15,7 @@ if uploaded_files:
             st.write(f"DataFrame: {df_name}")
             df = pd.read_csv(uploaded_file)
             st.write(df.head())
-            print(dataframes)
+            #print(dataframes)
             #st.dataframe(dataframes[df_name].head())
 
     # Chatbot interaction
