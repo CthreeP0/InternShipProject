@@ -1,5 +1,5 @@
 import pandas as pd
-from stream_app import st
+import streamlit as st
 from langchain_openai import AzureChatOpenAI
 from langchain_experimental.tools import PythonAstREPLTool
 from langchain_core.prompts import ChatPromptTemplate
@@ -10,6 +10,7 @@ from langchain_core.messages import ToolMessage
 
 class ChatbotAgent:
     def __init__(self, dataframes):
+        print("ChatbotAgent initialized")
         self.dataframes = {name: pd.read_csv(df) for name, df in dataframes.items()}
         self.llm = AzureChatOpenAI(
             deployment_name="gpt-35-turbo-16k",

@@ -1,5 +1,6 @@
 import streamlit as st
 from agent import ChatbotAgent
+import pandas as pd
 
 # Streamlit UI for file upload
 st.title("CSV File Uploader")
@@ -12,7 +13,10 @@ if uploaded_files:
             df_name = uploaded_file.name.split('.')[0]
             dataframes[df_name] = uploaded_file
             st.write(f"DataFrame: {df_name}")
-            st.dataframe(dataframes[df_name].head())
+            df = pd.read_csv(uploaded_file)
+            st.write(df.head())
+            print(dataframes)
+            #st.dataframe(dataframes[df_name].head())
 
     # Chatbot interaction
     st.title("Chatbot Interaction")
