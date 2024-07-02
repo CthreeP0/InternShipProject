@@ -8,6 +8,7 @@ from langchain.output_parsers.openai_tools import JsonOutputKeyToolsParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.messages import ToolMessage
 
+
 class ChatbotAgent:
     def __init__(self, dataframes):
         self.dataframes = {name: pd.read_csv(df) for name, df in dataframes.items()}

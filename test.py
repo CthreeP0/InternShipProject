@@ -30,7 +30,7 @@ if uploaded_files:
             df_name = uploaded_file.name.split('.')[0]
             dataframes[df_name] = pd.read_csv(uploaded_file)
             st.write(f"DataFrame: {df_name}")
-            st.dataframe(dataframes[df_name].head())
+            #st.dataframe(dataframes[df_name].head())
 
 
 # Convert the dataframes to markdown for the prompt

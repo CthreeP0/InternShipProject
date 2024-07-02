@@ -23,7 +23,7 @@ if uploaded_files:
     user_question = st.text_input("Ask a question about the dataframes:")
 
     if user_question:
-        agent = ChatbotAgent(dataframes=dataframes)
+        agent = ChatbotAgent(df)
         response = agent.answer_question(user_question)
         st.write("Chatbot Response:")
         st.write(response)
